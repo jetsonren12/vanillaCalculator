@@ -1,10 +1,7 @@
 let calculator = document.querySelector('.main-container')
-let displayContainer = document.querySelector('#display-container')
+let displayCon = document.querySelector('#display-container')
 
-let displayUpperHalf = document.createElement('div')
-displayUpperHalf.setAttribute('id', 'upper')
-
-let calFunctions = ['C','Del','/','%',7,8,9,'x',4,5,6,'-',1,2,3,'+','',0,'.','=']
+let calFunctions = ['AC','Del','/','%',7,8,9,'x',4,5,6,'-',1,2,3,'+','',0,'.','=']
 
 let calcState = {
     firstNum: [],
@@ -13,7 +10,9 @@ let calcState = {
     operator: null,
     isWaitingOnSecondNum: false,
     isComplete: false,
-    toPercent(){return this.firstNum.reduce((t,v) => t + v,0)/100}
+    toPercent(){
+        console.log(true)
+    }
 }
 
 function createCalc(){
@@ -48,7 +47,7 @@ function addBtns(sym){
 
             if(btn.innerText === '='){
                 btn.setAttribute('id', 'equal')
-            } else if(btn.innerText === 'C'){
+            } else if(btn.innerText === 'AC'){
                 btn.setAttribute('id','clear')
             } else if(btn.innerText === 'Del'){
                 btn.setAttribute('id','del')
@@ -85,29 +84,14 @@ function addBtns(sym){
                 calcState.isWaitingOnSecondNum = true
             }
                 
-            // if((e.target.id === 'equal') && (calcState.isComplete)){
-            //     operate(calcState.operator,parseFloat(calcState.firstNum.join('')),parseFloat(calcState.secondNum.join('')))
-            //     calcState.firstNum = calcState.result.toString().split('')
-            //     calcState.secondNum = []
-            //     calcState.isComplete = false
-            // } 
-
             equal.addEventListener('click', () =>{
                 if(calcState.isComplete){
                     operate(calcState.operator,parseFloat(calcState.firstNum.join('')),parseFloat(calcState.secondNum.join('')))
                     calcState.firstNum = calcState.result.toString().split('')
                     calcState.secondNum = []
                     calcState.isComplete = false
-                    console.log(calcState)
                 }
             })
-
-
-            clear.addEventListener('click', () =>{
-                post('')
-                clearState()
-            })
-
 
             if((e.target.id === 'del') && (!calcState.isWaitingOnSecondNum)){
                 calcState.firstNum.pop().split(' ')
@@ -117,14 +101,22 @@ function addBtns(sym){
                 post(calcState.secondNum.join(''))
             }
 
+            if(e.target.innerText === '%'){
+                calcState.toPercent()
+            }
+
+            clear.addEventListener('click', () =>{
+                post('')
+                clearState()
+            })
         })
     }  
     
 }
 
 function post(r){
-    displayUpperHalf.innerText = ''
-    displayUpperHalf.innerText = `${r}`
+    displayCon.innerText = ''
+    displayCon.innerText = `${r}`
 }
 
 function operate(op,n1,n2){
@@ -154,4 +146,5 @@ function operate(op,n1,n2){
 
 
 createCalc()
-displayContainer.append(displayUpperHalf)
+displayCon
+// .append(displayUpperHalf)
