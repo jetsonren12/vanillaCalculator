@@ -52,8 +52,7 @@ function addBtns(sym){
                 btn.setAttribute('id','clear')
             } else if(btn.innerText === 'Del'){
                 btn.setAttribute('id','del')
-            } 
-            else if((typeof(sym[num]) === 'number') || (btn.innerText === '.')){
+            } else if((typeof(sym[num]) === 'number') || (btn.innerText === '.')){
                 btn.setAttribute('class', 'num')
             } else {
                 btn.setAttribute('class', 'func')
@@ -62,7 +61,10 @@ function addBtns(sym){
             num++
         }
 
+        
         btnContainer.addEventListener('click', e => {
+            let clear = document.querySelector('#clear')
+            let equal = document.querySelector('#equal')
 
             if((e.target.className === 'num') && (calcState.isWaitingOnSecondNum)){
                 calcState.secondNum.push(e.target.innerText)
@@ -83,23 +85,38 @@ function addBtns(sym){
                 calcState.isWaitingOnSecondNum = true
             }
                 
-            if((e.target.id === 'equal') && (calcState.isComplete)){
-                operate(calcState.operator,parseFloat(calcState.firstNum.join('')),parseFloat(calcState.secondNum.join('')))
-                calcState.firstNum = calcState.result.toString().split('')
-                calcState.secondNum = []
-                calcState.isComplete = false
-            } 
-            
-            if(e.target.id === 'clear'){
+            // if((e.target.id === 'equal') && (calcState.isComplete)){
+            //     operate(calcState.operator,parseFloat(calcState.firstNum.join('')),parseFloat(calcState.secondNum.join('')))
+            //     calcState.firstNum = calcState.result.toString().split('')
+            //     calcState.secondNum = []
+            //     calcState.isComplete = false
+            // } 
+
+            equal.addEventListener('click', () =>{
+                if(calcState.isComplete){
+                    operate(calcState.operator,parseFloat(calcState.firstNum.join('')),parseFloat(calcState.secondNum.join('')))
+                    calcState.firstNum = calcState.result.toString().split('')
+                    calcState.secondNum = []
+                    calcState.isComplete = false
+                    console.log(calcState)
+                }
+            })
+
+
+            clear.addEventListener('click', () =>{
                 post('')
                 clearState()
-            } else if((e.target.id === 'del') && (!calcState.isWaitingOnSecondNum)){
+            })
+
+
+            if((e.target.id === 'del') && (!calcState.isWaitingOnSecondNum)){
                 calcState.firstNum.pop().split(' ')
                 post(calcState.firstNum.join(''))
             } else if((e.target.id === 'del') && (calcState.isWaitingOnSecondNum)){
                 calcState.secondNum.pop().split(' ')
                 post(calcState.secondNum.join(''))
             }
+
         })
     }  
     
@@ -132,6 +149,8 @@ function operate(op,n1,n2){
                 break;
     }    
 }
+
+
 
 
 createCalc()
