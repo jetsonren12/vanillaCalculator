@@ -1,32 +1,23 @@
-body,
-#calc,
-#display-container,
-.main-container,
-.btn-container {
+body {
     font-family: 'Comic Sans', Verdana, sans-serif;
     display: flex;
-}
-
-body {
     padding-top: 50px;
     flex-direction: column;
     align-items: center;
     gap: 15px;
 }
 
+/* Calculator */
+#calc,
+#display-container,
+.main-container,
+.btn-container {
+    display: flex;
+}
 
 #calc,
 #display-container {
     border-radius: 15px;
-}
-
-#calc {
-    background: rgba(0, 0, 0);
-    width: auto;
-    box-shadow: 2px 4px 16px rgba(0,0,0,.5);
-    padding: 30px;
-    gap: 20px;
-    flex-direction: column;
 }
 
 #display-container {
@@ -41,7 +32,14 @@ body {
     padding-bottom: 35px;
 }
 
-
+#calc {
+    background: rgba(0, 0, 0);
+    width: auto;
+    box-shadow: 2px 4px 16px rgba(0,0,0,.5);
+    padding: 30px;
+    gap: 20px;
+    flex-direction: column;
+}
 
 .main-container {
     flex-direction: column;
@@ -51,18 +49,9 @@ body {
 .btn-container {
     gap: 25px;
 }
-#clear,
-#del,
-.func {
-    background-color: rgb(255, 149, 0);
-}
 
 
-.num {
-    background-color: rgb(80,80,80);
-
-}
-
+/* Buttons on the calculator */
 .num,
 .func,
 #equal,
@@ -78,6 +67,16 @@ body {
     flex: 1;
 }
 
+#clear,
+#del,
+.func {
+    background-color: rgb(255, 149, 0);
+}
+
+.num {
+    background-color: rgb(80,80,80);
+
+}
 
 #equal{
     background-color: rgb(255,50,50);

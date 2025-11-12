@@ -1,7 +1,7 @@
 let calculator = document.querySelector('.main-container')
 let displayCon = document.querySelector('#display-container')
 
-let calFunctions = ['AC','Del','/','%',7,8,9,'x',4,5,6,'-',1,2,3,'+','',0,'.','=']
+let calFunctions = ['AC','Del','/','',7,8,9,'x',4,5,6,'-',1,2,3,'+','',0,'.','=']
 
 let calcState = {
     firstNum: [],
@@ -9,15 +9,7 @@ let calcState = {
     result: null,
     operator: null,
     isWaitingOnSecondNum: false,
-    isComplete: false,
-    toPercent(){
-        console.log(true)
-    }
-}
-
-function createCalc(){
-    const cleanedSym = calFunctions.filter(c => c !== ',')
-    addBtns(cleanedSym)
+    isComplete: false
 }
 
 const clearState = () => {
@@ -34,34 +26,42 @@ const subtract = (a,b) => b - a
 const multiply = (a,b) => a * b
 const divide = (a,b) => b / a
 
+function createCalc(){
+    const cleanedSym = calFunctions.filter(c => c !== ',')
+    addBtns(cleanedSym)
+}
+
 function addBtns(sym){
-    let num = 0
+    let n = 0
     for(let x = 5; x > 0; x--){
         let btnContainer = document.createElement('div')
         btnContainer.setAttribute('class', 'btn-container')
         calculator.append(btnContainer)
         for(let y = 4; y > 0; y--){
             const btn = document.createElement('button')
-            btn.innerText = `${sym[num]}`
-            btn.value = `${sym[num]}`
+            btn.innerText = `${sym[n]}`
+            btn.value = `${sym[n]}`
 
             if(btn.innerText === '='){
                 btn.setAttribute('id', 'equal')
+            } else if(btn.innerText === '.'){
+                btn.setAttribute('id','decimal')
+                btn.setAttribute('class','num')
             } else if(btn.innerText === 'AC'){
                 btn.setAttribute('id','clear')
             } else if(btn.innerText === 'Del'){
                 btn.setAttribute('id','del')
-            } else if((typeof(sym[num]) === 'number') || (btn.innerText === '.')){
+            } else if((typeof(sym[n]) === 'number') || (btn.innerText === '.')){
                 btn.setAttribute('class', 'num')
             } else {
                 btn.setAttribute('class', 'func')
             }
             btnContainer.append(btn)
-            num++
+            n++
         }
 
-        
         btnContainer.addEventListener('click', e => {
+            let decimal = document.querySelector('#decimal')
             let clear = document.querySelector('#clear')
             let equal = document.querySelector('#equal')
 
@@ -82,7 +82,12 @@ function addBtns(sym){
                 } 
                 calcState.operator = e.target.innerText
                 calcState.isWaitingOnSecondNum = true
+                decimal.disabled = false
             }
+
+            decimal.addEventListener('click', () => {
+                decimal.disabled = true
+            })
                 
             equal.addEventListener('click', () =>{
                 if(calcState.isComplete){
@@ -91,6 +96,7 @@ function addBtns(sym){
                     calcState.secondNum = []
                     calcState.isComplete = false
                 }
+                decimal.disabled = false
             })
 
             if((e.target.id === 'del') && (!calcState.isWaitingOnSecondNum)){
@@ -101,13 +107,10 @@ function addBtns(sym){
                 post(calcState.secondNum.join(''))
             }
 
-            if(e.target.innerText === '%'){
-                calcState.toPercent()
-            }
-
             clear.addEventListener('click', () =>{
                 post('')
                 clearState()
+                decimal.disabled = false
             })
         })
     }  
@@ -136,15 +139,8 @@ function operate(op,n1,n2){
         case 'x':
             calcState.result = multiply(n1,n2)
             post(calcState.result)
-            break;   
-        default:
-                break;
+            break;  
     }    
 }
 
-
-
-
 createCalc()
-displayCon
-// .append(displayUpperHalf)
